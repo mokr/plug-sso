@@ -24,11 +24,11 @@
   ARGS:
   host  = Host where application is running that link should point to
   token = The reset token that should be part of the URL"
-  [host token]
-  (format "Click <a href=\"%s/reset/%s\">this link</a> to set a new password for %s" host token host)) ;;TODO: Separation between host and app-name
+  [app host token]
+  (format "Click <a href=\"%s/reset/%s\">this link</a> to set a new password for %s" host token app)) ;;TODO: Separation between host and app-name
 
 
-(defn send-reset-email [{:keys [email reset-token app-host]} smtp-config]
+(defn send-reset-email [{:keys [app email reset-token app-host]} smtp-config]
   {:pre [(valid? :user/email email)
          (valid? :reset/token reset-token)
          (string? app-host)]}
@@ -44,9 +44,9 @@
                 :pass   pass}
         msg    {:from    user
                 :to      email
-                :subject (format "%s password reset" app-host)
+                :subject (format "%s password reset" app)
                 :body    [{:type    "text/html"
-                           :content (email-content app-host reset-token)}]}
+                           :content (email-content app app-host reset-token)}]}
         result (smtp/smtp-send args msg)]
     (log/info (format "Reset email sent to %s" email))
     (log/debug "SMTP result" result)
