@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{app}} login</title>
+    {% style "/assets/bulma/css/bulma.min.css" %}
+    <!--    {% style "/assets/material-icons/css/material-icons.min.css" %}-->
+</head>
+<body>
+
+<section class="section">
+    <div class="container">
+        <div class="content">
+            <div class="box">
+
+                {% if feedback %}
+                <h2>{{feedback}}</h2>
+                {% endif %}
+
+                {% if error %}
+                <h2 class="has-text-danger">{{error}}</h2>
+                {% endif %}
+
+                {% if timestamp %}
+                <small class="has-text-grey"> <em> {{timestamp}} </em> </small>
+                {% endif %}
+
+                <p>{{message}}</p>
+
+                {% if redirect-url %}
+                <a href={{redirect-url}}>{{redirect-text}}</a>
+                {% endif %}
+
+            </div>
+        </div>
+    </div>
+</section>
+
+</body>
+</html>

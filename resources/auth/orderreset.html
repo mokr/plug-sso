@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{app}} password reset</title>
+    {% style "/assets/bulma/css/bulma.min.css" %}
+    <!--    {% style "/assets/material-icons/css/material-icons.min.css" %}-->
+</head>
+<body>
+
+<section class="section">
+    <div class="container">
+        <div class="content">
+            <div class="box">
+                <h2>Request password reset for <strong>{{app}}</strong></h2>
+                <p>Provide the email address you use to log in to your account</p>
+                <form class="" method="post">
+
+                    <div class="field">
+                        <p class="control">
+                            <input class="input" type="email" name="email" placeholder="Email" autocomplete="email">
+                            <span class="icon is-small is-left">
+                                <i class="fas fa-envelope"></i>
+                        </span>
+                        </p>
+                    </div>
+
+
+                    <button class="button is-info">Send</button>
+
+                    {% if message %}
+                    <h4>{{message}}</h4>
+                    {% endif %}
+
+                </form>
+                <br>
+                <em><strong>Next: </strong>You will get an email with a link provided that there is a valid account for
+                    email above.</em>
+                <br>
+                <a href="/login">Back to login</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+</body>
+</html>

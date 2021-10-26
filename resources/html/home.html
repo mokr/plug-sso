@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>SSO admin</title>
+    {% style "/assets/bulma/css/bulma.min.css" %}
+    {% style "/assets/material-icons/iconfont/material-icons.css" %}
+    {% style "/css/screen.css" %}
+</head>
+<body>
+
+<div id="app">
+</div>
+
+<script type="text/javascript">
+        var csrfToken = "{{csrf-token}}";
+
+
+</script>
+{% script "/js/app.js" %}
+</body>
+</html>
