@@ -21,7 +21,6 @@
                  [day8.re-frame/http-fx "0.2.3"]
                  [expound "0.8.10"]
                  [funcool/struct "1.4.0"]
-                 [javax.mail/mail "1.4.3"]                  ;;DEBUG
                  [json-html "0.4.7"]
                  [luminus-transit "0.1.2"]
                  [luminus-undertow "0.1.12"]
