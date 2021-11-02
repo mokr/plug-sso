@@ -17,7 +17,7 @@
                  [com.draines/postal "2.0.4"]
                  [com.taoensso/timbre "5.1.2"]
                  [cprop "0.1.19"]
-                 [datalevin "0.5.26"]
+                 [datalevin "0.5.27"]
                  [day8.re-frame/http-fx "0.2.3"]
                  [expound "0.8.10"]
                  [funcool/struct "1.4.0"]
@@ -77,7 +77,7 @@
 
    :project/dev   {:jvm-opts       ["-Dconf=dev-config.edn"]
                    :dependencies   [[binaryage/devtools "1.0.4"]
-                                    [cider/piggieback "0.5.2"]
+                                    [cider/piggieback "0.5.3"]
                                     [pjstadig/humane-test-output "0.11.0"]
                                     [prone "2021-04-23"]
                                     [re-frisk "1.5.1"]
