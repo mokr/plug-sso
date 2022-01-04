@@ -9,6 +9,7 @@
                  [buddy/buddy-hashers "1.8.1"]
                  [buddy/buddy-sign "3.4.1"]
                  [ch.qos.logback/logback-classic "1.2.6"]
+                 [clj-commons/fs "1.6.310"]
                  [clj-http "3.12.3"]
                  [cljs-ajax "0.8.4"]
                  [clojure.java-time "0.3.3"]
