@@ -1,5 +1,6 @@
 (ns plug-sso.handler
   (:require
+    [plug-sso.config :refer [env]]
     [plug-sso.middleware :as middleware]
     [plug-sso.layout :refer [error-page]]
     [plug-sso.routes.home :refer [home-routes]]
@@ -25,8 +26,8 @@
        (sso-service/api-endpoint)                           ;; (service)   API for client lib to communicated with service
        (sso-lib/auth-routes {:app            "SSO admin"    ;; (lib)       Auth routes handling auth (both in app utilizing the lib and to authenticate for admin UI)
                              :reset-capable? true
-                             :sso-host       "localhost"
-                             :sso-port       3300})])
+                             :sso-host       (:sso-host env)
+                             :sso-port       (:sso-port env)})])
     (ring/routes
       (ring/create-resource-handler
         {:path "/"})
