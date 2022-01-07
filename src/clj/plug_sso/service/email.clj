@@ -34,15 +34,15 @@
          (string? app-host)]}
   (log/info (format "About to send reset mail to %s with token '%s' and host '%s'" email reset-token app-host))
   (log/debug (format "SMTP CONF: %s" smtp-config))
-  (let [{:keys [smtp/host smtp/port smtp/user smtp/pass]} smtp-config
-        args   {:host   host
-                :port   port
+  (let [{:keys [smtp-host smtp-port smtp-user smtp-pass]} smtp-config
+        args   {:host   smtp-host
+                :port   smtp-port
                 :tls    :y
                 ;:debug  true                                ;;=> ...Broken pipe (Write failed)...
-                :sender user
-                :user   user
-                :pass   pass}
-        msg    {:from    user
+                :sender smtp-user
+                :user   smtp-user
+                :pass   smtp-pass}
+        msg    {:from    smtp-user
                 :to      email
                 :subject (format "%s password reset" app)
                 :body    [{:type    "text/html"

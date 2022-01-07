@@ -18,3 +18,4 @@ profiles.clj
 .eastwood
 *.iml
 package-lock.json
+ansible_config.yml

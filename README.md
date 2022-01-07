@@ -100,18 +100,20 @@ REPLs:
    {:middleware [sso-lib/wrap-protected,,,]}],,,) ;; <<<<< ADD THIS
 ```
 
-### Environment
+### Config
 
-#### Email support requires the following:
+Main config relies on a file called `ansible_config.yml`
+This file is generated from Ansible, written to a secure place and symlinked into project (dev).
+`ansible_config.yml` is present in `.gitignore`. In prod it will reside next to server.jar
+
+#### Email support requires the following config keys:
 
 ```shell
-SMTP___HOST
-SMTP___PORT
-SMTP___USER
-SMTP___PASS
+:smtp-host
+:smtp-port
+:smtp-user
+:smtp-pass
 ```
-
-NOTE: *Three* underscores after `SMTP` (e.g. `SMTP___HOST` is then accessed as `:smtp/host` in source code.)
 
 # Design
 

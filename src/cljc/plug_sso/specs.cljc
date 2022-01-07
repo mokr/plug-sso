@@ -121,11 +121,11 @@
 
 (def smtp-keys
   "Define required SMTP keys separately for use elsewhere in e.g. (select-keys env ...)"
-  [:smtp/host :smtp/port :smtp/user :smtp/pass])
+  [:smtp-host :smtp-port :smtp-user :smtp-pass])
 
-(s/def :smtp/host (s/and string? #(str/starts-with? % "smtp.")))
-(s/def :smtp/port pos-int?)
-(s/def :smtp/user (s/and string? #(str/includes? % "@")))
-(s/def :smtp/pass string?)
+(s/def ::smtp-host (s/and string? #(str/starts-with? % "smtp.")))
+(s/def ::smtp-port pos-int?)
+(s/def ::smtp-user (s/and string? #(str/includes? % "@")))
+(s/def ::smtp-pass string?)
 
-(s/def :smtp/config (s/keys :req (vec smtp-keys)))
+(s/def :smtp/config (s/keys :req-un [::smtp-host ::smtp-port ::smtp-user ::smtp-pass]))
