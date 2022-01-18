@@ -25,12 +25,12 @@
 (rf/reg-event-db
   :edit/app
   [rf/trim-v]
-  (fn [db [id]]
+  (fn [{:keys [apps] :as db} [id]]
     (js/console.info "EDIT APP" id)
-    (if-let [app (->> db
-                      :apps
-                      (filter #(-> % :db/id (= id)))
-                      (first))]
+    (if-let [app (some->
+                   (filter #(-> % :db/id (= id)) apps)
+                   (first)
+                   (update :access/roles #(str/join "," %)))]
       (assoc db EDIT-APP-KEY app)
       db)))
 
