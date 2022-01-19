@@ -1,6 +1,7 @@
 (ns plug-sso.db.entities.app
   (:require [taoensso.timbre :as log]
             [datalevin.core :as d]
+            [clojure.data :as data]
             [clojure.spec.alpha :as s]
             [plug-utils.spec :refer [valid?]]
             [plug-sso.specs :as $]
@@ -78,11 +79,28 @@
 ;|-------------------------------------------------
 ;| MANAGEMENT
 
+(defn- decide-roles-to-be-retracted
+  "Compare stored roles for an app with the ones in app to be saved.
+  Return roles that should be removed from DB"
+  [{:keys [app/name access/roles] :as new-app-data}]
+  {:pre  [(string? name) (sequential? roles)]
+   :post [(or (nil? %) (coll? %))]}
+  (let [stored-roles (available-roles name)
+        fresh-roles  (into #{} roles)                       ;; Make sure we pass a set to 'diff'
+        [roles-to-be-removed _ _] (data/diff stored-roles fresh-roles)] ;; First element in 3-tuple is the entries only in DB. See diff doc
+    roles-to-be-removed))
+
+
 (defn upsert
   "Update a app with specified fields only."
-  [app]
+  [{:keys [app/name] :as app}]
   {:pre [(valid? ::$/app app)]}
-  (d/transact! db/conn [app]))
+  ;;TODO: Remove accesses using a role that is no longer valid. With confirmation?
+  (let [roles-to-retract (decide-roles-to-be-retracted app)
+        retractions      (map (fn [role]
+                                [:db/retract [:app/name name] :access/roles role])
+                              roles-to-retract)]
+    (d/transact! db/conn (concat retractions [app]))))
 
 
 (defn delete-app [app-name]
