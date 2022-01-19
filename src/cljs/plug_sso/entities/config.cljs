@@ -27,6 +27,7 @@
    :app/name
    :access/roles
    :app/description
+   :app/url
    :_modify/app])
 
 
@@ -64,6 +65,7 @@
                            :description "App name represents a unique ID in DB"
                            :tooltip     key-as-tooltip}
    :app/description       {:display "Description" :tooltip key-as-tooltip}
+   :app/url               {:display "URL" :tooltip key-as-tooltip}
    :access/roles          {:display "Roles" :tooltip key-as-tooltip}
    :access/for            {:display "User" :tooltip key-as-tooltip}
    :access/role           {:display "Role" :tooltip key-as-tooltip}
@@ -125,6 +127,11 @@
                            :class   ["has-text-warning-dark"]
                            :tooltip (fn [{:keys [reset/token]}]
                                       token)}
+   :app/url               {:render (fn [{:keys [v] :as this}]
+                                     [:td
+                                      [:a {:href  v :target "_blank" :rel "noreferrer"
+                                           :style {:cursor "pointer"}}
+                                       v]])}
    :access/roles          {
                            ;:value-formatter str
                            :render render/roles-as-tags}

@@ -134,7 +134,14 @@
     [:div.control.is-expanded>input.input {:type        "text"
                                            :placeholder "e.g. admin, user, fut"
                                            :value       (<sub [:edited/app :access/roles])
-                                           :on-change   (update-app :access/roles :formatter str/lower-case)}]]])
+                                           :on-change   (update-app :access/roles :formatter str/lower-case)}]]
+   [:div.field
+    [:label.label "URL"]
+    [:div.control.is-expanded>input.input {:type        "text"
+                                           :placeholder "URL to app"
+                                           :value       (<sub [:edited/app :app/url])
+                                           :on-change   (update-app :app/url)}]]
+   ])
 
 
 (defn edit-app-card []

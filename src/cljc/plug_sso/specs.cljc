@@ -81,11 +81,13 @@
 
 (s/def :app/name string?)
 (s/def :app/description string?)
+(s/def :app/url string?)
 (s/def :access/roles (s/coll-of ::access-role :distinct true :into #{} :max-count 10)) ;; Not likely to have more than 10 available roles, so might want to take a look if we pass that limit
 
 (s/def ::app (s/keys :req [:app/name]
                      :opt [:access/roles
-                           :app/description]))
+                           :app/description
+                           :app/url]))
 (s/def ::apps (s/coll-of ::app))
 
 (s/def ::app-or-app-name (s/or ::app-name :app/name
