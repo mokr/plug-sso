@@ -4,7 +4,8 @@
             [plug-utils.re-frame :refer [<sub >evt]]
             [plug-utils.dom :refer [target-value]]
             [plug-fetch.core :as fetch]
-            [re-frame.core :as rf]))
+            [re-frame.core :as rf]
+            [taoensso.timbre :as log]))
 
 (def ^:private EDIT-USER-KEY :edited-user)
 
@@ -23,7 +24,6 @@
   :edit/user
   [rf/trim-v]
   (fn [db [id]]
-    (js/console.info "EDIT USER" id)
     (if-let [user (->> db
                        :users
                        (filter #(-> % :db/id (= id)))
@@ -46,8 +46,7 @@
   :new/user
   [rf/trim-v]
   (fn [db [_]]
-    (assoc db EDIT-USER-KEY {})
-    ))
+    (assoc db EDIT-USER-KEY {})))
 
 
 (rf/reg-event-fx
@@ -73,7 +72,7 @@
   [rf/trim-v]
   (fn [{:keys [db]} [_]]
     (when-let [user (get db EDIT-USER-KEY)]
-      (js/console.info "SAVE/UPSERT USER" user)
+      (log/debug "USER to save" user)
       (fetch/make-fx-map-for-backend-event
         {:method :post
          :uri    "/api/users"

@@ -5,7 +5,8 @@
             [plug-utils.dom :refer [target-value]]
             [plug-utils.debug :as d]
             [plug-fetch.core :as fetch]
-            [re-frame.core :as rf]))
+            [re-frame.core :as rf]
+            [taoensso.timbre :as log]))
 
 
 (def ^:private EDIT-APP-KEY :edited-app)
@@ -26,7 +27,6 @@
   :edit/app
   [rf/trim-v]
   (fn [{:keys [apps] :as db} [id]]
-    (js/console.info "EDIT APP" id)
     (if-let [app (some->
                    (filter #(-> % :db/id (= id)) apps)
                    (first)
@@ -77,6 +77,7 @@
     (when-let [app (some->
                      (get db EDIT-APP-KEY)
                      (update :access/roles #(some-> % (str/split #",\s*") vec)))]
+      (log/debug "APP to save" app)
       (fetch/make-fx-map-for-backend-event
         {:method :post
          :uri    "/api/apps"
