@@ -4,6 +4,7 @@
     [plug-sso.entities.user.data]
     [plug-sso.entities.user.management :as user-management]
     [plug-sso.entities.app.management :as app-management]
+    [plug-sso.entities.access.management]
     [plug-sso.entities.access.data]
     [plug-sso.entities.app.data]
     [plug-sso.generic.icon :as icon]

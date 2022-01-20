@@ -1,8 +1,5 @@
 (ns plug-sso.entities.events
   (:require [re-frame.core :as rf]
-            [clojure.spec.alpha :as s]
-            [plug-sso.specs :as $]
-            [plug-fetch.core :as fetch]
             [plug-utils.re-frame :refer [>evt]]))
 
 
@@ -36,33 +33,4 @@
   [rf/trim-v]
   (fn [db [err]]
     (js/console.error err)
-    (assoc db :latest/error err)
-    ))
-
-
-
-
-;|-------------------------------------------------
-;| ACCESS ACTIONS
-
-(rf/reg-event-fx
-  :delete/access
-  [rf/trim-v]
-  (fn [_ [id]]
-    (fetch/make-fx-map-for-backend-event
-      {:method :delete
-       :uri    (str "/api/accesses/" id)
-       :ok-fx  [[:dispatch [:fetch/accesses]]]})))
-
-
-(rf/reg-event-fx
-  :upsert/access
-  [rf/trim-v]
-  (fn [_ [[user-id role app-id :as new-access]]]
-    {:pre [s/valid? ::$/new-access new-access]}
-    (js/console.info "UPSERT ACCESS" new-access)
-    (fetch/make-fx-map-for-backend-event
-      {:method :post
-       :uri    "/api/accesses"
-       :params {:new-access new-access}
-       :ok-fx  [[:dispatch [:fetch/accesses]]]})))
+    (assoc db :latest/error err)))
