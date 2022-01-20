@@ -51,7 +51,7 @@
   (fn [_ [id]]
     (fetch/make-fx-map-for-backend-event
       {:method :delete
-       :uri    (str "/accesses/" id)
+       :uri    (str "/api/accesses/" id)
        :ok-fx  [[:dispatch [:fetch/accesses]]]})))
 
 
