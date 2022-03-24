@@ -32,7 +32,7 @@
   [:div
    [icon/button {:name     "logout"
                  :class    "has-text-grey"
-                 :tooltip  "Log out (not implemented yet)"
+                 :tooltip  "Logout"
                  :on-click #(>evt [::sso-event/logout])}]])
 
 
