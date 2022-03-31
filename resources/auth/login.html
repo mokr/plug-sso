@@ -4,44 +4,54 @@
     <meta charset="UTF-8">
     <title>{{app}} login</title>
     {% style "/assets/bulma/css/bulma.min.css" %}
-    <!--    {% style "/assets/material-icons/css/material-icons.min.css" %}-->
 </head>
 <body>
 
-<section class="section">
-    <div class="container">
-        <div class="content">
-            <div class="box">
-                <h2>{{app}} login</h2>
-                <form class="" method="post" action="/login">
-                    <div class="field">
-                        <p class="control">
-                            <input class="input" type="email" name="email" placeholder="Email" autocomplete="email">
-                            <span class="icon is-small is-left">
-                                <i class="fas fa-envelope"></i>
-                        </span>
-                        </p>
+<!-- Inspiration: https://codepen.io/stevehalford/pen/YeYEOR -->
+
+<section class="hero is-dark is-fullheight">
+    <div class="hero-body">
+        <div class="container ">
+            <div class="columns is-centered">
+                <div class="column is-5-tablet is-4-desktop is-3-widescreen">
+                    <div class=" is-justify-content-center">
+                        <h3 class="title is-3 has-text-centered">{{app}} login</h3>
+                        <div class="box is-align-self-center" style="max-width: 25em;">
+
+                            <form class="" method="post" action="/login">
+                                <div class="field">
+                                    <label for="" class="label">Email</label>
+                                    <p class="control">
+                                        <input class="input" type="email" name="email" placeholder="Email"
+                                               autocomplete="email">
+                                    </p>
+                                </div>
+
+                                <div class="field">
+                                    <label for="" class="label">Password</label>
+                                    <p class="control">
+                                        <input class="input" type="password" name="password" placeholder="Password"
+                                               autocomplete="current-password">
+                                    </p>
+                                </div>
+
+                                <button class="button is-dark">Sign in</button>
+                            </form>
+                            <hr>
+                            {% if reset-capable? %}
+                            <div class="has-text-centered">
+                                <a class="has-text-info" href="/orderreset">Click here to reset password</a>
+                            </div>
+                            {% endif %}
+
+                            {% if error %}
+                            <br>
+                            <strong class="has-text-danger">{{error}}</strong>
+                            {% endif %}
+
+                        </div>
                     </div>
-
-                    <div class="field">
-                        <p class="control">
-                            <input class="input" type="password" name="password" placeholder="Password"
-                                   autocomplete="current-password">
-                        </p>
-                    </div>
-
-                    <button class="button is-info">Sign in</button>
-                </form>
-
-                {% if reset-capable? %}
-                <a href="/orderreset">Click here to reset password</a>
-                {% endif %}
-
-                {% if error %}
-                <br>
-                <strong class="has-text-danger">{{error}}</strong>
-                {% endif %}
-
+                </div>
             </div>
         </div>
     </div>
