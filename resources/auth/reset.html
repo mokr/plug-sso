@@ -4,37 +4,44 @@
     <meta charset="UTF-8">
     <title>{{app}} password reset</title>
     {% style "/assets/bulma/css/bulma.min.css" %}
-    <!--    {% style "/assets/material-icons/css/material-icons.min.css" %}-->
 </head>
 <body>
 
-<section class="section">
-    <div class="container">
-        <div class="content">
-            <div class="box">
-                <h2>Define new password for {{app}}</h2>
-                <form class="" method="post">
+<section class="hero is-dark is-fullheight">
+    <div class="hero-body">
+        <div class="container ">
+            <div class="columns is-centered">
+                <div class="column is-6-tablet is-5-desktop is-4-widescreen">
+                    <div class=" is-justify-content-center">
+                        <h3 class="title is-3 has-text-centered">Define new password for <strong>{{app}}</strong></h3>
+                        <div class="box is-align-self-center" style="max-width: 25em;">
 
-                    <div class="field">
-                        <p class="control">
-                            <input class="input" type="password" name="new-password" placeholder="New password"
-                                   autocomplete="new-password">
-                        </p>
+                            <form class="" method="post">
+
+                                <div class="field">
+                                    <label for="" class="label">Password</label>
+                                    <p class="control">
+                                        <input class="input" type="password" name="new-password"
+                                               placeholder="New password"
+                                               autocomplete="new-password">
+                                    </p>
+                                </div>
+
+                                <button class="button is-dark">Save</button>
+
+                                {% if message %}
+                                <h4>{{message}}</h4>
+                                {% endif %}
+
+                                {% if validation-error %}
+                                <hr>
+                                <p class="has-text-danger">{{validation-error}}</p>
+                                {% endif %}
+
+                            </form>
+                        </div>
                     </div>
-
-                    <button class="button is-info">Save</button>
-
-                    {% if message %}
-                    <h4>{{message}}</h4>
-                    {% endif %}
-
-                    {% if validation-error %}
-                    <hr>
-                    <p class="has-text-danger">{{validation-error}}</p>
-                    {% endif %}
-
-                </form>
-
+                </div>
             </div>
         </div>
     </div>
