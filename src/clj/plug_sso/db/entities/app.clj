@@ -7,6 +7,7 @@
             [plug-sso.specs :as $]
             [plug-sso.db.entities.access :as access]
             [plug-sso.db.core :as db]
+            [plug-sso.db.queries :as q]
             [plug-sso.db.utils :refer [delete-entity
                                        delete-entities
                                        get-entity
@@ -25,22 +26,13 @@
 
 
 ;|-------------------------------------------------
-;| QUERIES
-
-(def ^:private q-list-of-apps
-  '[:find [(pull ?e [*]) ...]                               ;; Return collection of app maps
-    :where
-    [?e :app/name]])
-
-
-;|-------------------------------------------------
 ;| LISTINGS
 
 (defn list-of-apps
   "Get list of all existing apps."
   []
   {:post [(valid? ::$/apps %)]}
-  (d/q q-list-of-apps
+  (d/q q/list-of-apps
        (d/db db/conn)))
 
 

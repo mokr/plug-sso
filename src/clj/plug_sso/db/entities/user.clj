@@ -9,6 +9,7 @@
                                        get-entity
                                        maybe]]
             [plug-sso.db.core :as db]
+            [plug-sso.db.queries :as q]
             [clojure.spec.alpha :as s])
   (:import [java.util UUID]))
 
@@ -50,37 +51,6 @@
 
 
 ;|-------------------------------------------------
-;| QUERIES
-
-(def ^:private q-list-of-users
-  '[:find [(pull ?e [*]) ...]
-    :where
-    [?e :user/email]])
-
-
-(def ^:private q-users-hash-and-role
-  '[:find ?hash ?role                                       ;; [(pull ?usr [*]) ...]
-    :in $ ?user-email ?app-name
-    :where
-    [?usr :user/email ?user-email]                          ;; Find user with given email ..
-    [?acc :access/for ?usr]                                 ;; .. and user's accesses ..
-    [?acc :access/to ?app]                                  ;; .. to some app ..
-    [?app :app/name ?app-name]                              ;; .. where that app has given name. Then:
-    [?usr :password/hash ?hash]                             ;; Get password hash for this user ..
-    [?acc :access/role ?role]])                             ;; .. and the access role for the app
-
-
-(def ^:private q-user-has-access-to-app?
-  '[:find ?usr                                              ;; What we return is not of importance here.
-    :in $ ?user-email ?app-name
-    :where
-    [?usr :user/email ?user-email]                          ;; Find user with given email ..
-    [?acc :access/for ?usr]                                 ;; .. and user's accesses ..
-    [?acc :access/to ?app]                                  ;; .. to some app ..
-    [?app :app/name ?app-name]])                            ;; .. where that app has given name. Then:
-
-
-;|-------------------------------------------------
 ;| RETRIEVE
 
 (defn get-users-hash-and-role-for-app
@@ -91,14 +61,15 @@
   [email app-name]
   ;{:post [(valid? ::$/users %)]}
   (first
-    (d/q q-users-hash-and-role
+    (d/q q/user-hash-and-role
          (d/db db/conn)
          email app-name)))
+
 
 (defn user-has-access-to-app? [email app-name]
   (boolean
     (first
-      (d/q q-user-has-access-to-app?
+      (d/q q/user-has-access-to-app?
            (d/db db/conn)
            email app-name))))
 
@@ -217,7 +188,7 @@
   E.g. for listing users in admin GUI"
   []
   {:post [(valid? ::$/users %)]}
-  (d/q q-list-of-users
+  (d/q q/list-of-users
        (d/db db/conn)))
 
 
