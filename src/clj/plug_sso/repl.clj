@@ -1,7 +1,11 @@
 (ns plug-sso.repl
   "REPL code for plug-sso"
   (:require [plug-sso.service.email :as email]
-            [plug-sso.config :refer [env]]))
+            [plug-sso.config :refer [env]]
+            [plug-sso.db.entities.app :as app]
+            [plug-sso.db.entities.user :as user]
+            [plug-sso.db.entities.access :as access]
+            [plug-sso.db.export :as export]))
 
 
 ;|-------------------------------------------------
@@ -21,6 +25,14 @@
 ;| REPL
 
 (comment
+  (set! *print-namespace-maps* false)
+
   (email/smtp-config-from-env env)
 
+  (app/list-of-apps)
+  (user/list-of-users)
+  (access/list-of-accesses)
+
+  (export/db-data-as-map)
+  (export/db-data-as-transaction-data)
   )

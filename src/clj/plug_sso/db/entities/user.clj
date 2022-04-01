@@ -183,7 +183,7 @@
   (d/transact! db/conn [user]))
 
 
-(defn listing
+(defn list-of-users
   "Get list of all existing users.
   E.g. for listing users in admin GUI"
   []

@@ -112,3 +112,26 @@
     [?app :app/name ?app-name]
     ;[?acc :failed/logins ?failed-count]
     ])
+
+
+;|-------------------------------------------------
+;| DATA EXPORT
+
+(def export-users-data
+  '[:find [(pull ?e [*]) ...]                               ;; Return collection of app maps
+    :where
+    [?e :user/email]])
+
+
+(def export-apps-data
+  "Export apps without :db/id"
+  '[:find [(pull ?e [*]) ...]                               ;; Return collection of app maps
+    :where
+    [?e :app/name]])
+
+
+(def export-accesses-data
+  '[:find [(pull ?e [* {:access/for [:user/email]} {:access/to [:app/name]}]) ...] ;; Return collection of app maps
+    :where
+    [?e :access/for]
+    [?e :access/to]])

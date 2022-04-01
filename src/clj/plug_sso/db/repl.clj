@@ -83,7 +83,7 @@
 
 (comment
   ;;USERS
-  (user/listing)
+  (user/list-of-users)
   (user/get-user-by-email "bob@example.com")
   (user/get-user-by-email "alice@example.com")
   (user/get-users-hash-and-role-for-app "bob@example.com" "SSO admin")

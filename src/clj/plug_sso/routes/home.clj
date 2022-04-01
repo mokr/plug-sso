@@ -67,7 +67,7 @@
                        (println "identity:" identity)
                        (try
                          (some->
-                           (user/listing)
+                           (user/list-of-users)
                            (response/ok))
                          (catch Exception e
                            (log/debug (format "USERS MESSAGE: %s -- full err: %s" (.getMessage e) (str e)))
