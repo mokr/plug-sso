@@ -36,13 +36,6 @@
   (fn [_ _]
     {}))
 
-;(rf/reg-event-fx
-;  :sso/logout
-;  (fn [_ _]
-;    (js/console.warn "Logout not implemented yet!")
-;    {}))
-
-
 
 ;|-------------------------------------------------
 ;| SUBSCRIPTIONS
