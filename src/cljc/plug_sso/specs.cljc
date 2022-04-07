@@ -131,3 +131,19 @@
 (s/def ::smtp-pass string?)
 
 (s/def :smtp/config (s/keys :req-un [::smtp-host ::smtp-port ::smtp-user ::smtp-pass]))
+
+
+;|-------------------------------------------------
+;| IMPORT / EXPORT
+
+(s/def ::exported inst?)
+(s/def ::source-info string?)
+(s/def :exported/users ::users)
+(s/def :exported/accesses ::accesses)
+(s/def :exported/apps ::apps)
+(s/def :imported/data (s/keys :opt-un [:exported/users
+                                       :exported/accesses
+                                       :exported/apps]))
+(s/def ::file-import (s/keys :req-un [:imported/data]
+                             :opt-un [::exported
+                                      ::source-info]))

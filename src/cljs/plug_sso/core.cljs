@@ -12,6 +12,7 @@
     [plug-sso.lib.events :as sso-event]
     [plug-sso.pages.about :as about]
     [plug-sso.pages.home :as home]
+    [plug-sso.import-export.ui :as import-export]
     [plug-sso.pages.management :as management]
     [plug-sso.entities.config :as entities-config]
     [plug-sso.entities.subs]
@@ -38,23 +39,24 @@
 
 (defn navbar []
   (r/with-let [expanded? (r/atom false)]
-    [:nav.navbar.is-dark>div.container
-     [:div.navbar-brand
-      [:a.navbar-item {:href "/" :style {:font-weight :bold}} "SSO admin"]
-      [:span.navbar-burger.burger
-       {:data-target :nav-menu
-        :on-click    #(swap! expanded? not)
-        :class       (when @expanded? :is-active)}
-       [:span] [:span] [:span]]]
-     [:div#nav-menu.navbar-menu
-      {:class (when @expanded? :is-active)}
-      [:div.navbar-start
-       [nav-link "#/" "Home" :home]
-       [nav-link "#/management" "Management" :management]
-       [nav-link "#/about" "About" :about]]
-      [:div.navbar-end
-       [:div.navbar-item
-        [top-right-icons-menu]]]]]))
+              [:nav.navbar.is-dark>div.container
+               [:div.navbar-brand
+                [:a.navbar-item {:href "/" :style {:font-weight :bold}} "SSO admin"]
+                [:span.navbar-burger.burger
+                 {:data-target :nav-menu
+                  :on-click    #(swap! expanded? not)
+                  :class       (when @expanded? :is-active)}
+                 [:span] [:span] [:span]]]
+               [:div#nav-menu.navbar-menu
+                {:class (when @expanded? :is-active)}
+                [:div.navbar-start
+                 [nav-link "#/" "Home" :home]
+                 [nav-link "#/management" "Management" :management]
+                 [nav-link "#/import-export" "Import/Export" :import-export]
+                 [nav-link "#/about" "About" :about]]
+                [:div.navbar-end
+                 [:div.navbar-item
+                  [top-right-icons-menu]]]]]))
 
 
 (defn page []
@@ -76,6 +78,8 @@
      ["/management" {:name        :management
                      :view        #'management/page
                      :controllers [{:start (fn [_] (rf/dispatch [:init/management]))}]}]
+     ["/import-export" {:name :import-export
+                        :view #'import-export/page}]
      ["/about" {:name :about
                 :view #'about/page}]]))
 

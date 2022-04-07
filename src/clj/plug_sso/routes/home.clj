@@ -8,11 +8,15 @@
     [plug-sso.middleware :as middleware]
     [ring.util.response]
     [ring.util.http-response :as response]
+    [plug-sso.db.core :as db]
     [plug-sso.db.entities.access :as access]
     [plug-sso.db.entities.app :as app]
     [plug-sso.db.entities.user :as user]
+    [plug-sso.db.export :as export]
+    [plug-sso.db.import :as import]
     [plug-sso.db.utils :refer [add-creation-keys
-                               add-modification-keys]]))
+                               add-modification-keys]]
+    [datalevin.core :as d]))
 
 
 ;|-------------------------------------------------
@@ -104,8 +108,7 @@
                               (access/upsert new-access)
                               (response/ok))
                             (catch Exception e
-                              (response/internal-server-error "Unable save new access at the moment")
-                              )))}]
+                              (response/internal-server-error "Unable save new access at the moment"))))}]
     ["/accesses/:id" {:delete (delete-by-id-handler "access" access/delete-by-id)}]
     ["/apps" {:get  (fn [req]
                       (try
@@ -130,9 +133,16 @@
                         (response/ok)
                         (catch Exception e
                           (log/warn (format "Unable to create/modify app at the moment. Request from %s" identity))
-                          (response/internal-server-error "Unable to create/modify app at the moment")))
-                      )}]
-
-    ["/apps/:id" {:delete (delete-by-id-handler "access" app/delete-by-id)}]]
-   ])
-
+                          (response/internal-server-error "Unable to create/modify app at the moment"))))}]
+    ["/apps/:id" {:delete (delete-by-id-handler "access" app/delete-by-id)}]
+    ;; EXPORT
+    ["/export/transactions" {:get (fn [_]
+                                    (response/ok
+                                      (export/db-as-transaction-data)))}]
+    ["/import/entities" {:post (fn [{:keys [params]}]
+                                 (let [log-text (format "Processing import of %s %s" (-> params :transactions count) (some-> params :category name))]
+                                   ;;TODO: Try/catch and/or other error handling
+                                   (log/info (str log-text " *STARTING*"))
+                                   (import/category-based-import params)
+                                   (log/info (str log-text " *DONE*"))
+                                   (response/ok {:message "Data transacted"})))}]]])
