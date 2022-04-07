@@ -192,12 +192,4 @@
       ;(update :login/failed-count inc)
       )
 
-  (d/q
-    ;q/access-for-user-to-app
-    q/access-for-user-to-app-as-ids
-    (d/db db/conn)
-    "mkt@ice.no"
-    "SSO admin"
-    )
-
   )

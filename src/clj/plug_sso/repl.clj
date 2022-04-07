@@ -43,6 +43,6 @@
   )
 
 (comment
-  (access/upsert [[:user/email "foo@ice.no"] "user" [:app/name "app1"]])
+  (access/upsert [[:user/email "foo@example.no"] "user" [:app/name "app1"]])
 
   )
