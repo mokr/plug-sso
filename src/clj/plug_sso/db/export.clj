@@ -2,7 +2,8 @@
   (:require
     [datalevin.core :as d]
     [plug-sso.db.core :as db]
-    [plug-sso.db.queries :as q]))
+    [plug-sso.db.queries :as q]
+    [plug-utils.time :as ut]))
 
 
 ;|-------------------------------------------------
@@ -50,9 +51,12 @@
   A \"pure\" data approach not affected by how DB happened to store data generated IDs."
   []
   {:post [(map? %)]}
-  {:users    (users-data)
-   :apps     (apps-data)
-   :accesses (accesses-data)})
+  {:exported    (ut/instant-now)
+   :source-info "SSO admin (plug-sso)"
+   :data
+   {:users    (users-data)
+    :apps     (apps-data)
+    :accesses (accesses-data)}})
 
 
 (defn db-as-transaction-data
