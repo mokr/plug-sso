@@ -50,3 +50,9 @@
            (-> (d/get-conn db-path schema)
                (inject-defaults-if-db-is-empty env)))
   :stop (d/close conn))
+
+
+(defn transact! [transactions]
+  (d/transact! conn transactions)
+
+  )

@@ -4,6 +4,7 @@
             [plug-utils.spec :refer [valid?]]
             [plug-sso.specs :as $]
             [plug-sso.db.entities.access :as access]
+            [plug-sso.db.import :as import]
             [plug-sso.db.utils :refer [delete-entity
                                        delete-entities
                                        get-entity
@@ -217,8 +218,17 @@
     (delete-by-id id email)))
 
 
-;(defn get-essential-auth-data
-;  "Retrieve map of auth data the client typically needs to render authentication related information."
-;  [user app]
-;
-;  )
+;|-------------------------------------------------
+;| IMPORT
+
+(defn- upsert-multi
+  "Upsert based on a collection of users as maps.
+  Typically, for importing from a data based export.
+  Note: A \"data based export\" means data without DB IDs."
+  [users]
+  {:pre [(valid? ::$/users users)]}
+  (d/transact! db/conn users))
+
+
+(defmethod import/category-based-import :users [{:keys [transactions]}]
+  (upsert-multi transactions))

@@ -1,7 +1,9 @@
 (ns plug-sso.repl
   "REPL code for plug-sso"
-  (:require [plug-sso.service.email :as email]
+  (:require [datalevin.core :as d]
+            [plug-sso.service.email :as email]
             [plug-sso.config :refer [env]]
+            [plug-sso.db.core :as db]
             [plug-sso.db.entities.app :as app]
             [plug-sso.db.entities.user :as user]
             [plug-sso.db.entities.access :as access]
@@ -34,5 +36,13 @@
   (access/list-of-accesses)
 
   (export/db-data-as-map)
-  (export/db-data-as-transaction-data)
+  (export/db-as-transaction-data)
+
+  ;; ALL DATOMS
+  (d/datoms (d/db db/conn) :eav)
+  )
+
+(comment
+  (access/upsert [[:user/email "foo@ice.no"] "user" [:app/name "app1"]])
+
   )

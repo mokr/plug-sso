@@ -114,6 +114,20 @@
     ])
 
 
+
+(def access-for-user-to-app-as-ids
+  "When importing from a (data) backup we need to know the IDs of any existing access
+  and the entities it applies to, as well as the name of the existing role"
+  '[:find [?acc ?usr ?app ?role-name]
+    :in $ ?user-email ?app-name
+    :where
+    [?usr :user/email ?user-email]
+    [?acc :access/for ?usr]
+    [?acc :access/to ?app]
+    [?acc :access/role ?role-name]
+    [?app :app/name ?app-name]])
+
+
 ;|-------------------------------------------------
 ;| DATA EXPORT
 

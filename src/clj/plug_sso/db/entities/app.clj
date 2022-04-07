@@ -5,8 +5,9 @@
             [clojure.spec.alpha :as s]
             [plug-utils.spec :refer [valid?]]
             [plug-sso.specs :as $]
-            [plug-sso.db.entities.access :as access]
             [plug-sso.db.core :as db]
+            [plug-sso.db.entities.access :as access]
+            [plug-sso.db.import :as import]
             [plug-sso.db.queries :as q]
             [plug-sso.db.utils :refer [delete-entity
                                        delete-entities
@@ -117,3 +118,19 @@
     (catch Exception e
       (log/error (format "Deleting app failed with '%s'" (.getMessage e)))
       (throw (InternalError. (format "Failed deleting app with ID %s)" id))))))
+
+
+;|-------------------------------------------------
+;| IMPORT
+
+(defn- upsert-multi
+  "Upsert based on a collection of apps as maps.
+  Typically, for importing from a data based export.
+  Note: A \"data based export\" means data without DB IDs."
+  [apps]
+  {:pre [(valid? ::$/apps apps)]}
+  (d/transact! db/conn apps))
+
+
+(defmethod import/category-based-import :apps [{:keys [transactions]}]
+  (upsert-multi transactions))

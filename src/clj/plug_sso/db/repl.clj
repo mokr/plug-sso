@@ -5,6 +5,7 @@
             [plug-sso.db.entities.user :as user]
             [plug-sso.db.entities.app :as app]
             [plug-sso.db.entities.access :as access]
+            [plug-sso.db.queries :as q]
             [plug-utils.string :as us]
             [plug-sso.db.utils :as du]
             [plug-sso.specs :as spec'ed]
@@ -77,6 +78,15 @@
   (d/schema db/conn)
   (d/datoms (d/db db/conn) :eav)
   )
+
+
+;|-------------------------------------------------
+;| CLEAR
+
+(comment
+  (d/clear db/conn)
+  )
+
 
 ;|-------------------------------------------------
 ;| QUERY

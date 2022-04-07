@@ -55,7 +55,7 @@
    :accesses (accesses-data)})
 
 
-(defn db-data-as-transaction-data
+(defn db-as-transaction-data
   "Export as data without :db/id.
   Return a collection of Db entities as maps that can be transacted"
   []

@@ -4,6 +4,7 @@
             [clojure.string :as str]
             [datalevin.core :as d]
             [plug-utils.spec :refer [valid?]]
+            [plug-sso.db.import :as import]
             [plug-sso.specs :as $]
             [plug-sso.db.queries :as q]
             [plug-sso.db.utils :refer [delete-entity
@@ -105,7 +106,7 @@
 ;| MANAGEMENT
 
 (defn delete-by-id
-  "Delete an access by id"
+  "Delete access by id"
   [id]
   (try                                                      ;; TODO: get info about access for logging
     (delete-entity id)
@@ -139,3 +140,41 @@
         (d/transact! db/conn [{:access/for  {:db/id user-id}
                                :access/to   {:db/id app-id}
                                :access/role role}])))))
+
+
+;|-------------------------------------------------
+;| IMPORT
+
+(defn- upsert-based-on-data-import
+  "Upsert access based on a map from a data based export.
+  Note: A \"data based export\" means data without DB IDs."
+  [{{user-email :user/email} :access/for
+    {app-name :app/name}     :access/to
+    role                     :access/role
+    :as                      access}]
+  {:pre [(map? access)]}
+  (let [[access-id user-id app-id existing-role] (d/q q/access-for-user-to-app-as-ids
+                                                      (d/db db/conn) user-email app-name)
+        access-exists? (pos-int? access-id)]
+
+    ;; Correct role for an existing access if needed
+    (when (and access-exists?
+               (not= role existing-role))
+      (log/info (format "Access %s updated from role %s" [user-email role app-name] existing-role))
+      (d/transact! db/conn [[:db/add access-id :access/role role]]))
+
+    ;; Add non-existing access (will also create missing users and apps)
+    (when-not access-exists?
+      (log/info (format "Creating missing access %s" [user-email role app-name]))
+      (d/transact! db/conn [access]))))
+
+
+(defn- multi-upsert-from-map-transactions
+  "Collection of maps"
+  [accesses]
+  (doseq [access accesses]
+    (upsert-based-on-data-import access)))
+
+
+(defmethod import/category-based-import :accesses [{:keys [transactions]}]
+  (multi-upsert-from-map-transactions transactions))
