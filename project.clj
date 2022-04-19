@@ -78,7 +78,7 @@
    :test          [:project/dev :project/test :profiles/test]
 
    :project/dev   {:jvm-opts       ["-Dconf=dev-config.edn"]
-                   :dependencies   [[binaryage/devtools "1.0.5"]
+                   :dependencies   [[binaryage/devtools "1.0.6"]
                                     [cider/piggieback "0.5.3"]
                                     [pjstadig/humane-test-output "0.11.0"]
                                     [prone "2021-04-23"]
