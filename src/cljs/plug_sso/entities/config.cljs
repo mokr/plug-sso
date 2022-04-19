@@ -18,6 +18,7 @@
    :company/name
    :company/department
    :password/hash
+   :created/at
    :reset/token
    :_modify/user])
 
@@ -55,6 +56,7 @@
    :user/name             {:display "Name" :tooltip key-as-tooltip}
    :user/info             {:display "Info" :tooltip key-as-tooltip}
    :password/hash         {:display "Hash" :tooltip key-as-tooltip}
+   :created/at            {:display "Created" :tooltip key-as-tooltip}
    :reset/token           {:display     "Token" :tooltip key-as-tooltip
                            :description "On-time token to be used for password reset"}
    :company/name          {:display "Company" :tooltip key-as-tooltip}
@@ -138,10 +140,13 @@
    :access/for            {
                            ;:lookup-as       :user
                            ;:value-formatter #(:db/id %)
-                           :render (render/ref-renderer-presenting :user/name)
+                           ;:render (render/ref-renderer-presenting :user/name)
+                           :render (render/ref-renderer-presenting :user/email)
                            ;:lookup          user-lookup'
                            }
    :last/successful-login {:tag     :td>small.has-text-success-dark
+                           :display pretty-timestamp}
+   :created/at            {:tag     :td>small
                            :display pretty-timestamp}
    :last/failed-login     {:tag     :td>small.has-text-danger-dark
                            :display pretty-timestamp}
