@@ -3,7 +3,7 @@
             [clojure.spec.alpha :as s]
             [datalevin.core :as d]
             [plug-utils.spec :refer [valid?]]
-            [plug-sso.specs :as spec'ed]
+            [plug-sso.specs :as $]
             [plug-sso.db.core :as db])
   (:import [java.util Date]))
 
@@ -60,7 +60,7 @@
 (defn add-creation-keys
   "Add keys that many entities have for tracking when and who added them"
   [m identity]
-  {:pre [(valid? ::spec'ed/identity identity)]}
+  {:pre [(valid? ::$/identity identity)]}
   (assoc m
     :created/by identity
     :created/at (Date.)))
@@ -69,7 +69,7 @@
 (defn add-modification-keys
   "Add keys that many entities have for tracking when and who modified them"
   [m identity]
-  {:pre [(valid? ::spec'ed/identity identity)]}
+  {:pre [(valid? ::$/identity identity)]}
   (assoc m
     :modified/by identity
     :modified/at (Date.)))

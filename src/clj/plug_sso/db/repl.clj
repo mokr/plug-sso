@@ -8,7 +8,7 @@
             [plug-sso.db.queries :as q]
             [plug-utils.string :as us]
             [plug-sso.db.utils :as du]
-            [plug-sso.specs :as spec'ed]
+            [plug-sso.specs :as $]
             [clojure.spec.alpha :as s]))
 
 
@@ -179,10 +179,10 @@
   (du/maybe :app/name {:app/name "app1"})
   (du/maybe :app/name :foo)
 
-  (s/conform ::spec'ed/email "bob@example.com")
-  (s/conform ::spec'ed/email "bob@example")
-  (s/unform ::spec'ed/email "bob@example")
-  (s/unform ::spec'ed/email "bob@example.com")
+  (s/conform ::$/email "bob@example.com")
+  (s/conform ::$/email "bob@example")
+  (s/unform ::$/email "bob@example")
+  (s/unform ::$/email "bob@example.com")
 
   ;PERF
   (time (app/available-roles "app2"))
