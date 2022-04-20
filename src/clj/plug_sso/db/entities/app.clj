@@ -85,7 +85,7 @@
 
 
 (defn upsert
-  "Update a app with specified fields only."
+  "Update an app with specified fields only."
   [{:keys [app/name] :as app}]
   {:pre [(valid? ::$/app app)]}
   ;;TODO: Remove accesses using a role that is no longer valid. With confirmation?
