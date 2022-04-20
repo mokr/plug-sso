@@ -12,7 +12,7 @@
     [plug-sso.lib.events :as sso-event]
     [plug-sso.pages.about :as about]
     [plug-sso.pages.home :as home]
-    [plug-sso.import-export.ui :as import-export]
+    [plug-sso.pages.import-export :as import-export]
     [plug-sso.pages.management :as management]
     [plug-sso.entities.config :as entities-config]
     [plug-sso.entities.subs]

@@ -1,6 +1,5 @@
-(ns plug-sso.import-export.effects
+(ns plug-sso.effects
   (:require [re-frame.core :as rf]))
-
 
 
 (rf/reg-fx

@@ -136,9 +136,12 @@
                           (response/internal-server-error "Unable to create/modify app at the moment"))))}]
     ["/apps/:id" {:delete (delete-by-id-handler "access" app/delete-by-id)}]
     ;; EXPORT
-    ["/export/transactions" {:get (fn [_]
-                                    (response/ok
-                                      (export/db-as-transaction-data)))}]
+    ;["/export/transactions" {:get (fn [_]
+    ;                                (response/ok
+    ;                                  (export/db-as-transaction-data)))}]
+    ["/export/data" {:get (fn [_]
+                            (response/ok
+                              (export/db-data-as-map)))}]
     ["/import/entities" {:post (fn [{:keys [params]}]
                                  (let [log-text (format "Processing import of %s %s" (-> params :transactions count) (some-> params :category name))]
                                    ;;TODO: Try/catch and/or other error handling

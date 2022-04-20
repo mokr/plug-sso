@@ -1,24 +1,9 @@
-(ns plug-sso.import-export.ui
-  (:require [plug-sso.import-export.config :refer [IMPORT-KEY]]
-            [plug-sso.import-export.events]
-            [plug-sso.import-export.subs]
+(ns plug-sso.import-export.ui.import
+  (:require [plug-sso.config :refer [IMPORTED-DATA]]
             [plug-utils.re-frame :refer [<sub >evt]]
-            [plug-utils.time :as ut]
             [re-frame.core :as rf]
             [taoensso.timbre :as log]))
 
-
-;|-------------------------------------------------
-;| HELPERS
-
-(defn- dispatch-file-content-and-store-in [db-key]
-  (fn [e]
-    (let [file     (-> e .-target .-files (aget 0))
-          filename (-> file .-name)
-          reader   (js/FileReader.)]
-      (log/debug (str "Opened file \"" filename "\""))
-      (set! (.-onload reader) #(rf/dispatch [:store/edn-data-from-file db-key filename (-> % .-target .-result)]))
-      (.readAsText reader file))))
 
 
 ;|-------------------------------------------------
@@ -41,6 +26,19 @@
 
 
 ;|-------------------------------------------------
+;| HELPERS
+
+(defn- dispatch-file-content-and-store-in [db-key]
+  (fn [e]
+    (let [file     (-> e .-target .-files (aget 0))
+          filename (-> file .-name)
+          reader   (js/FileReader.)]
+      (log/debug (str "Opened file \"" filename "\""))
+      (set! (.-onload reader) #(rf/dispatch [:store/edn-data-from-file db-key filename (-> % .-target .-result)]))
+      (.readAsText reader file))))
+
+
+;|-------------------------------------------------
 ;| FILE IMPORT AND INFO
 
 (defn- file-picker []
@@ -48,13 +46,13 @@
    {:type      "file"
     :accept    ".edn"
     :style     {:max-width "20em"}
-    :on-change (dispatch-file-content-and-store-in IMPORT-KEY)}])
+    :on-change (dispatch-file-content-and-store-in IMPORTED-DATA)}])
 
 
 (defn- discard-file-data-button []
   [:button.button.is-danger
    {:title    "Discard imported data (that has not already been transacted)\nAfterwards you can open a new file"
-    :on-click #(>evt [:discard/imported-data])}
+    :on-click #(>evt [:import/discard-current-data])}
    "Discard"])
 
 
@@ -75,8 +73,7 @@
      [:div.level-item
       [file-detail "Exported" exported]]
      [:div.level-item
-      [file-detail "Valid?" (if valid? "yes" "no")]
-      ]]
+      [file-detail "Valid?" (if valid? "yes" "no")]]]
     [:div.level-right
      [:div.level-item [discard-file-data-button]]]]])
 
@@ -85,7 +82,7 @@
   "Toggles between input to open a file or file info,
   depending on whether we already have a file imported or not"
   []
-  (if-let [file-info (<sub [:display-prepped/imported-data])]
+  (if-let [file-info (<sub [:import/display-prepped-data])]
     [file-details file-info]
     [:div.level
      [:div.level-item [file-picker]]]))
@@ -96,7 +93,7 @@
 
 (defn- stats-cell [category num-of-entries]
   [:td.is-clickable
-   {:on-double-click #(>evt [:console/print-path [IMPORT-KEY category]])}
+   {:on-double-click #(>evt [:console/print-path [IMPORTED-DATA category]])}
    num-of-entries])
 
 
@@ -111,7 +108,7 @@
      [:div.level-item.has-text-success
       [icon {:icon-id  :upload
              :disabled (< entry-count 1)
-             :on-click #(>evt [:transact/imported-category id])}]]]]])
+             :on-click #(>evt [:import/transact-category id])}]]]]])
 
 
 (defn- transaction-stats [{:keys [user-count access-count app-count unknown-count] :as stats}]
@@ -133,26 +130,13 @@
 
 
 (defn- describe-invalid-data []
-  [:pre (<sub [:invalid/data-description])]
-  )
+  [:pre (<sub [:import/invalid-data-description])])
 
 
 (defn- info-about-imported-data
   "Show either the imported data or a description about why it is invalid"
   []
-  (let [{:keys [valid?]} (<sub [:display-prepped/imported-data])]
+  (let [{:keys [valid?]} (<sub [:import/display-prepped-data])]
     (if valid?
-      [transaction-stats (<sub [:transaction/stats IMPORT-KEY])]
+      [transaction-stats (<sub [:transaction/stats IMPORTED-DATA])]
       [describe-invalid-data])))
-
-;|-------------------------------------------------
-;| PAGE
-
-(defn page []
-  [:section.section>div.container>div.content
-   [:div [:strong.has-text-danger "*alpha*"] [:em " Just a crude, first implementation"]]
-   [:h3.title.is.3 "Import from file"]
-   [:div.box
-    [file-open-or-info]
-    [:br]
-    [info-about-imported-data]]])

@@ -36,7 +36,7 @@
   (access/list-of-accesses)
 
   (export/db-data-as-map)
-  (export/db-as-transaction-data)
+  ;(export/db-as-transaction-data)
 
   ;; ALL DATOMS
   (d/datoms (d/db db/conn) :eav)

@@ -59,11 +59,11 @@
     :accesses (accesses-data)}})
 
 
-(defn db-as-transaction-data
-  "Export as data without :db/id.
-  Return a collection of Db entities as maps that can be transacted"
-  []
-  {:post [(sequential? %)]}
-  (concat (users-data)
-          (apps-data)
-          (accesses-data)))
+;(defn db-as-transaction-data
+;  "Export as data without :db/id.
+;  Return a collection of Db entities as maps that can be transacted"
+;  []
+;  {:post [(sequential? %)]}
+;  (concat (users-data)
+;          (apps-data)
+;          (accesses-data)))
