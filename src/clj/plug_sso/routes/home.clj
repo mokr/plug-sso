@@ -49,8 +49,9 @@
 ;|-------------------------------------------------
 ;| PAGES
 
-(defn home-page [request]
-  (layout/render request "home.html"))
+(defn home-page [{:keys [identity session] :as request}]
+  (log/debug request)
+  (layout/render request "home.html" {:identity identity :role (:role session)}))
 
 
 ;|-------------------------------------------------
