@@ -65,7 +65,7 @@
                          (update :email str/lower-case))
         email        (:email user-data)
         api-response (query-sso-service :login user-data sso-opts)
-        {:keys [timestamp issue? message role] :as result} (-> api-response :body keywordize-keys)] ;; TODO: clj-http can probably handle keywordize-keys with the right config
+        {:keys [timestamp issue? message access/role] :as result} (-> api-response :body keywordize-keys)] ;; TODO: clj-http can probably handle keywordize-keys with the right config
     (cond
 
       (not (predicates/success? api-response))              ;;HTTP request to SSO service API failed
