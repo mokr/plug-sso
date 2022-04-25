@@ -11,7 +11,7 @@
 
 (rf/reg-sub
   ::entity-lookup
-  :<- [::user/users]
+  :<- [::user/unfiltered-users]
   :<- [::app/apps]
   :<- [::access/accesses]
   (fn [[users apps accesses]]

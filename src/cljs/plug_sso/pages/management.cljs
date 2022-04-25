@@ -8,6 +8,7 @@
     [plug-sso.entities.access.data]
     [plug-sso.entities.app.data]
     [plug-sso.generic.icon :as icon]
+    [plug-sso.generic.ui :as gui]
     [plug-utils.re-frame :refer [<sub >evt]]
     [plug-utils.reagent :refer [err-boundary]]
     [re-frame.core :as rf]))
@@ -40,7 +41,7 @@
 (defn users-card []
   [:div.card
    [:header.card-header.has-background-info-light
-    [:h4.card-header-title "Users"]
+    [:h4.card-header-title "Users" [gui/filter-term-input :user/email]]
     [:div.card-header-icon
      [icon/button {:name     "add"
                    :tooltip  "Click to create a new user"

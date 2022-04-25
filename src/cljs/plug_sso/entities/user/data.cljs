@@ -3,9 +3,10 @@
             [plug-field.re-frame :as pfrf]
             [plug-field.ui.table :as pf-table]
             [plug-sso.entities.config :as config]
-            [plug-utils.log :as log]
-            [plug-utils.debug :as d]
-            [re-frame.core :as rf]))
+            [re-frame.core :as rf]
+            [taoensso.timbre :as log]
+            [clojure.string :as str]))
+
 
 ;|-------------------------------------------------
 ;| DEFINITIONS
@@ -26,14 +27,44 @@
 
 
 ;|-------------------------------------------------
+;| FILTER
+
+(rf/reg-event-db
+  :filter/update
+  [rf/trim-v]
+  (fn [db [key value]]
+    (->> value
+         (str/lower-case)
+         (assoc-in db [::filter key]))))
+
+
+(rf/reg-sub
+  :filter/terms
+  (fn [db [_ key]]
+    (str
+      (if key
+        (get-in db [::filter key])
+        (db key)))))
+
+
+;|-------------------------------------------------
 ;| SUBSCRIPTIONS
 
 (rf/reg-sub
-  ::users
+  ::unfiltered-users
   (fn [db [_]]
-    (some->>
-      (get db USERS-KEY)
-      (sort-by :user/email))))
+    (get db USERS-KEY)))
+
+
+(rf/reg-sub
+  ::users
+  :<- [::unfiltered-users]
+  :<- [:filter/terms :user/email]
+  (fn [[users filter-term]]
+    (->> users
+         (filter #(or (empty? filter-term)
+                      (-> % :user/email (str/includes? filter-term))))
+         (sort-by :user/email))))
 
 
 ;|-------------------------------------------------
