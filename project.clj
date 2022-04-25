@@ -19,7 +19,7 @@
                  [com.draines/postal "2.0.5"]
                  [com.taoensso/timbre "5.2.1"]
                  [cprop "0.1.19"]
-                 [datalevin "0.6.6"]
+                 [datalevin "0.6.7"]
                  [day8.re-frame/http-fx "0.2.4"]
                  [expound "0.9.0"]
                  [funcool/struct "1.4.0"]
@@ -41,7 +41,7 @@
                  [org.clojure/tools.cli "1.0.206"]
                  [org.clojure/tools.logging "1.2.4"]
                  [org.webjars.npm/bulma "0.9.3"]
-                 [org.webjars.npm/material-icons "1.7.1"]   ;; Note: Luminus template came with 0.7.0, but that (and 1.0.0) did not render properly
+                 [org.webjars.npm/material-icons "1.10.8"]  ;; Note: Luminus template came with 0.7.0, but that (and 1.0.0) did not render properly
                  [org.webjars/webjars-locator "0.45"]
                  [org.webjars/webjars-locator-jboss-vfs "0.1.0"]
                  [re-frame "1.2.0"]
