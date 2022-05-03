@@ -67,7 +67,7 @@
    [:div.column.is-4]
    [:div.column.is-4
     [:div.box
-     [gui/filter-term-input :user/email]]]
+     [gui/filter-component :user/email]]]
    [:div.column.is-4]])
 
 

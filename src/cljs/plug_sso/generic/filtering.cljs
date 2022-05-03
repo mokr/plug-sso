@@ -22,3 +22,12 @@
       (if key
         (get-in db [::filter key])
         (db key)))))
+
+
+(rf/reg-event-db
+  :filter/clear
+  [rf/trim-v]
+  (fn [db [key]]
+    (if key
+      (update db ::filter dissoc key)
+      (dissoc db ::filter))))
