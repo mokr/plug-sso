@@ -41,7 +41,7 @@
 (defn users-card []
   [:div.card
    [:header.card-header.has-background-info-light
-    [:h4.card-header-title "Users" [gui/filter-term-input :user/email]]
+    [:h4.card-header-title "Users"]
     [:div.card-header-icon
      [icon/button {:name     "add"
                    :tooltip  "Click to create a new user"
@@ -62,6 +62,15 @@
     [table/component (<sub [:accesses/table-data])]]])
 
 
+(defn email-filtering []
+  [:div.columns
+   [:div.column.is-4]
+   [:div.column.is-4
+    [:div.box
+     [gui/filter-term-input :user/email]]]
+   [:div.column.is-4]])
+
+
 ;|-------------------------------------------------
 ;| PAGE
 
@@ -76,7 +85,6 @@
                     :tooltip  "Click to re-fetch data from server"
                     :on-click #(>evt [:init/management])}]]]]
    [:br]
-
    [err-boundary
     (when (<sub [:user/edit-in-progress?])
       [user-management/edit-user-card])]
@@ -87,6 +95,7 @@
    [err-boundary
     [apps-card]]
    [:br]
+   [email-filtering]
    [err-boundary
     [users-card]]
    [:br]

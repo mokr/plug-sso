@@ -3,7 +3,8 @@
             [plug-field.re-frame :as pfrf]
             [plug-field.ui.table :as pf-table]
             [plug-sso.entities.config :as config]
-            [re-frame.core :as rf]))
+            [re-frame.core :as rf]
+            [clojure.string :as str]))
 
 ;|-------------------------------------------------
 ;| DEFINITIONS
@@ -27,11 +28,21 @@
 ;| SUBSCRIPTIONS
 
 (rf/reg-sub
-  ::accesses
+  ::unfiltered-accesses
   (fn [db [_]]
+    (get db ACCESSES-KEY)))
+
+
+(rf/reg-sub
+  ::accesses
+  :<- [::unfiltered-accesses]
+  :<- [:filter/terms :user/email]
+  :<- [:users/lookup-by-id]
+  (fn [[accesses filter-term lookup]]
     (some->>
-      (get db ACCESSES-KEY)
-      (sort-by (comp :db/id :access/for)))))                ;; Temp sorting. Need functionality to lookup refs for proper sorting.
+      accesses
+      (filter #(some-> % :access/for :db/id lookup :user/email (str/includes? filter-term)))
+      (sort-by (comp #(-> % :db/id lookup :user/email) :access/for)))))
 
 
 ;|-------------------------------------------------
@@ -72,6 +83,7 @@
   ::table-contents
   :<- [::field-value-factories]
   :<- [::accesses]
+  ;:<- [::unfiltered-accesses]
   :<- [::pfrf/row-config {:id-key :db/id}]
   pfrf/produce-field-entities-with-factories)
 

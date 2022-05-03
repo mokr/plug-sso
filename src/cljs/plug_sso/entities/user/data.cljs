@@ -27,33 +27,21 @@
 
 
 ;|-------------------------------------------------
-;| FILTER
-
-(rf/reg-event-db
-  :filter/update
-  [rf/trim-v]
-  (fn [db [key value]]
-    (->> value
-         (str/lower-case)
-         (assoc-in db [::filter key]))))
-
-
-(rf/reg-sub
-  :filter/terms
-  (fn [db [_ key]]
-    (str
-      (if key
-        (get-in db [::filter key])
-        (db key)))))
-
-
-;|-------------------------------------------------
 ;| SUBSCRIPTIONS
 
 (rf/reg-sub
   ::unfiltered-users
   (fn [db [_]]
     (get db USERS-KEY)))
+
+
+(rf/reg-sub
+  :users/lookup-by-id
+  :<- [::unfiltered-users]
+  (fn [users]
+    (->> users
+         (map (juxt :db/id identity))
+         (into {}))))
 
 
 (rf/reg-sub
