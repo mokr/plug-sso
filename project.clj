@@ -19,7 +19,7 @@
                  [com.draines/postal "2.0.5"]
                  [com.taoensso/timbre "5.2.1"]
                  [cprop "0.1.19"]
-                 [datalevin "0.6.7"]
+                 [datalevin "0.6.8"]
                  [day8.re-frame/http-fx "0.2.4"]
                  [expound "0.9.0"]
                  [funcool/struct "1.4.0"]
