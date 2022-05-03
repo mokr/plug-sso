@@ -1,27 +1,20 @@
 (ns plug-sso.generic.filtering
   (:require [re-frame.core :as rf]
-            [clojure.string :as str]))
+            [clojure.string :as str]
+            [taoensso.timbre :as log]))
 
 
 ;|-------------------------------------------------
-;| FILTER
+;| EVENTS
 
 (rf/reg-event-db
   :filter/update
   [rf/trim-v]
   (fn [db [key value]]
+    (log/debug "Filter on" key "=" value)
     (->> value
          (str/lower-case)
          (assoc-in db [::filter key]))))
-
-
-(rf/reg-sub
-  :filter/terms
-  (fn [db [_ key]]
-    (str
-      (if key
-        (get-in db [::filter key])
-        (db key)))))
 
 
 (rf/reg-event-db
@@ -31,3 +24,14 @@
     (if key
       (update db ::filter dissoc key)
       (dissoc db ::filter))))
+
+;|-------------------------------------------------
+;| SUBSCRIPTIONS
+
+(rf/reg-sub
+  :filter/terms
+  (fn [db [_ key]]
+    (str
+      (if key
+        (get-in db [::filter key])
+        (db key)))))

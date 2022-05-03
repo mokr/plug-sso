@@ -7,7 +7,8 @@
             [plug-utils.time :refer [inst->str]]
             [plug-utils.debug :as d]
             [re-frame.core :as rf]
-            [clojure.string :as str]))
+            [clojure.string :as str]
+            [taoensso.timbre :as log]))
 
 
 (def user-target-fields
@@ -115,7 +116,9 @@
                                        (when email
                                          "Click to set filter to this email"))
                            :on-click (fn [{:keys [user/email]} _]
+                                       (log/debug "Maybe filter email" "=" email)
                                        (when email
+                                         (log/debug "Filter on" email)
                                          (>evt [:filter/update :user/email email])))
                            :tag      :td>span.tag.is-light}
    :user/name             {:tooltip "Users name"}
