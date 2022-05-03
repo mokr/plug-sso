@@ -106,9 +106,18 @@
 ;|-------------------------------------------------
 ;| FIELD VALUE CONFIG
 
+;; Tip: fn variant has these arities: [event] OR [entity event] OR [entity field-cfg event]
 (def field-value-config
-  {:db/id                 {:class ["has-text-grey"]
-                           :tag   :td>span.tag.is-light}
+  {:db/id                 {:class    (fn [{:keys [user/email]} _]
+                                       (cond-> ["has-text-grey"]
+                                               email (conj "is-clickable")))
+                           :tooltip  (fn [{:keys [user/email]} _]
+                                       (when email
+                                         "Click to set filter to this email"))
+                           :on-click (fn [{:keys [user/email]} _]
+                                       (when email
+                                         (>evt [:filter/update :user/email email])))
+                           :tag      :td>span.tag.is-light}
    :user/name             {:tooltip "Users name"}
    :user/email            {:tooltip "Email is a unique identifier in DB"
                            :render  (fn [{user-id :id
