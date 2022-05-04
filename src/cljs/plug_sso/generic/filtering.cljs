@@ -11,8 +11,8 @@
   :filter/update
   [rf/trim-v]
   (fn [db [key value]]
-    (log/debug "Filter on" key "=" value)
     (->> value
+         (str/trim)
          (str/lower-case)
          (assoc-in db [::filter key]))))
 
