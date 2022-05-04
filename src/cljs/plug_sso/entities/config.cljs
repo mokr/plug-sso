@@ -109,29 +109,22 @@
 
 ;; Tip: fn variant has these arities: [event] OR [entity event] OR [entity field-cfg event]
 (def field-value-config
-  {:db/id                 {:class    (fn [{:keys [user/email]} _]
-                                       (cond-> ["has-text-grey"]
-                                               email (conj "is-clickable")))
-                           :tooltip  (fn [{:keys [user/email]} _]
-                                       (when email
-                                         "Click to set filter to this email"))
-                           :on-click (fn [{:keys [user/email]} _]
-                                       (log/debug "Maybe filter email" "=" email)
-                                       (when email
-                                         (log/debug "Filter on" email)
-                                         (>evt [:filter/update :user/email email])))
-                           :tag      :td>span.tag.is-light}
+  {:db/id                 {:class ["has-text-grey"]
+                           :tag   :td>span.tag.is-light}
    :user/name             {:tooltip "Users name"}
    :user/email            {:tooltip "Email is a unique identifier in DB"
                            :render  (fn [{user-id :id
                                           display :display
                                           :as     this}]
-                                      [:td {:on-drop      (fn [e]
-                                                            (let [[app-id role] (extract-transferred-data e)
-                                                                  new-access [user-id role app-id]]
-                                                              (>evt [:upsert/access new-access])))
-                                            :on-drag-over (fn [e]
-                                                            (.preventDefault e))}
+                                      [:td {:class           "is-clickable"
+                                            :title           "Double click to filter on this email"
+                                            :on-double-click #(>evt [:filter/update :user/email display])
+                                            :on-drop         (fn [e]
+                                                               (let [[app-id role] (extract-transferred-data e)
+                                                                     new-access [user-id role app-id]]
+                                                                 (>evt [:upsert/access new-access])))
+                                            :on-drag-over    (fn [e]
+                                                               (.preventDefault e))}
                                        display])}
    :password/hash         {:display yes-if-set
                            :class   ["has-text-primary-dark"]
