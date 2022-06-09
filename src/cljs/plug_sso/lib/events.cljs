@@ -1,10 +1,10 @@
 (ns plug-sso.lib.events
   (:require [re-frame.core :as rf]
             [plug-fetch.core :as fetch]
-            [plug-utils.http :refer [redirect]]))
+            [plug-utils.http :as http]))
 
 
 (rf/reg-event-fx
   ::logout
   (fn [{:keys [db]} [_ opts]]
-    (redirect "/logout")))
+    (http/client-redirect "/logout")))
