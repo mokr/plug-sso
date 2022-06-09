@@ -23,14 +23,3 @@
   (fn [_ [action id]]
     (when (js/confirm (confirmation-text action id))
       (>evt [action id]))))                                 ;; Eg. [:delete/user 2]
-
-
-;|-------------------------------------------------
-;| ERRORS
-
-(rf/reg-event-db
-  :reg/error
-  [rf/trim-v]
-  (fn [db [err]]
-    (js/console.error err)
-    (assoc db :latest/error err)))
