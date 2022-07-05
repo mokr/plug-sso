@@ -59,7 +59,8 @@
         sso-lib/wrap-auth
         defaults-middleware                                 ;; After auth to avoid prone.middleware/wrap-exceptions in DEV interfering with Buddy unauthorized exceptions
         wrap-flash
-        (wrap-session {:cookie-attrs {:http-only true}})
+        (wrap-session {:timeout      7200                   ; 7200 sec 2 hours (from old mTools)
+                       :cookie-attrs {:http-only true}})
         (wrap-defaults
           (-> site-defaults
               (assoc-in [:security :anti-forgery] false)
